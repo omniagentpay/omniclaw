@@ -1,8 +1,4 @@
-import { useState } from "react";
-
 const Navbar = () => {
-  const [hoveredLink, setHoveredLink] = useState<string | null>(null);
-
   const links = [
     { label: "Docs", href: "#docs" },
     { label: "Github", href: "#github" },
@@ -26,15 +22,13 @@ const Navbar = () => {
               key={link.label}
               href={link.href}
               className="text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground"
-              onMouseEnter={() => setHoveredLink(link.label)}
-              onMouseLeave={() => setHoveredLink(null)}
             >
               {link.label}
             </a>
           ))}
           <a
             href="#get-started"
-            className="glow-pulse rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-all duration-200 hover:brightness-110"
+            className="btn-shimmer glow-pulse rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-all duration-200 hover:brightness-110"
           >
             Get Started
           </a>
