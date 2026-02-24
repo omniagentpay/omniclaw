@@ -1,12 +1,30 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import Navbar from "@/components/Navbar";
+import HeroSection from "@/components/HeroSection";
+import SafetyKernel from "@/components/SafetyKernel";
+import TrustedBy from "@/components/TrustedBy";
 
 const Index = () => {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      <HeroSection />
+      <SafetyKernel />
+      <TrustedBy />
+
+      {/* Footer */}
+      <footer className="border-t border-border py-12 px-6">
+        <div className="container mx-auto max-w-6xl flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <div className="h-6 w-6 rounded-md bg-primary flex items-center justify-center">
+              <span className="text-primary-foreground font-bold text-xs">O</span>
+            </div>
+            <span className="font-display font-semibold text-sm text-foreground">OmniClaw</span>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            © 2026 OmniAgentPay, Inc. All rights reserved.
+          </p>
+        </div>
+      </footer>
     </div>
   );
 };
