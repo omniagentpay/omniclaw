@@ -1,6 +1,9 @@
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import SafetyKernel from "@/components/SafetyKernel";
+import ProtocolSwitcher from "@/components/ProtocolSwitcher";
+import GuardDashboard from "@/components/GuardDashboard";
+import MCPToolHighlight from "@/components/MCPToolHighlight";
 import TrustedBy from "@/components/TrustedBy";
 
 const Index = () => {
@@ -9,6 +12,9 @@ const Index = () => {
       <Navbar />
       <HeroSection />
       <SafetyKernel />
+      <ProtocolSwitcher />
+      <GuardDashboard />
+      <MCPToolHighlight />
       <TrustedBy />
 
       {/* Footer */}

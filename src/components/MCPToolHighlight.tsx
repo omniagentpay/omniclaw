@@ -1,0 +1,154 @@
+import { Bot, User, Wrench, CheckCircle } from "lucide-react";
+
+const chatMessages = [
+  {
+    role: "user" as const,
+    content: "Purchase 500 API credits from DataVendor for the research pipeline.",
+  },
+  {
+    role: "assistant" as const,
+    content: "I'll process that payment through your OmniClaw wallet. Let me execute the payment tool.",
+  },
+  {
+    role: "tool" as const,
+    name: "omniclaw_pay",
+    content: {
+      input: {
+        to: "datavendor.ai",
+        amount: 4.99,
+        currency: "USDC",
+        memo: "500 API credits — research pipeline",
+      },
+      output: {
+        status: "confirmed",
+        tx_hash: "0x7f3a...c9e1",
+        balance_after: 45.01,
+        guard_check: "all_gates_passed",
+      },
+    },
+  },
+  {
+    role: "assistant" as const,
+    content: "Done. Payment of $4.99 USDC confirmed. Your 500 API credits are now active. Remaining daily budget: $45.01.",
+  },
+];
+
+const MCPToolHighlight = () => {
+  return (
+    <section className="relative py-32 px-6 border-t border-border">
+      <div className="container mx-auto max-w-6xl">
+        <div className="text-center mb-16">
+          <p className="text-sm font-mono text-primary tracking-widest uppercase mb-4">
+            MCP Integration
+          </p>
+          <h2 className="font-display font-bold text-3xl md:text-5xl text-foreground tracking-tight mb-4">
+            Payments as a Tool Call
+          </h2>
+          <p className="text-muted-foreground text-lg max-w-xl mx-auto">
+            Connect OmniClaw to Claude, GPT, or any MCP-compatible agent. Payments become just another tool in the agent's toolkit.
+          </p>
+        </div>
+
+        {/* Chat mockup */}
+        <div className="glass-card max-w-3xl mx-auto overflow-hidden">
+          {/* Chat header */}
+          <div className="flex items-center gap-3 px-6 py-4 border-b border-border">
+            <div className="h-8 w-8 rounded-lg bg-accent/10 flex items-center justify-center">
+              <Bot size={16} className="text-accent" />
+            </div>
+            <div>
+              <div className="text-sm font-semibold text-foreground">Agent Session</div>
+              <div className="text-xs text-muted-foreground">
+                claude-4-opus · omniclaw_pay tool active
+              </div>
+            </div>
+            <div className="ml-auto flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-primary/10">
+              <div className="h-1.5 w-1.5 rounded-full bg-primary" />
+              <span className="text-xs font-mono text-primary font-medium">CONNECTED</span>
+            </div>
+          </div>
+
+          {/* Messages */}
+          <div className="p-6 space-y-5">
+            {chatMessages.map((msg, i) => {
+              if (msg.role === "user") {
+                return (
+                  <div key={i} className="flex gap-3">
+                    <div className="h-7 w-7 rounded-lg bg-muted flex items-center justify-center shrink-0 mt-0.5">
+                      <User size={14} className="text-muted-foreground" />
+                    </div>
+                    <div className="bg-muted/50 rounded-lg px-4 py-3 text-sm text-foreground/90 max-w-[85%]">
+                      {msg.content}
+                    </div>
+                  </div>
+                );
+              }
+
+              if (msg.role === "tool") {
+                return (
+                  <div key={i} className="flex gap-3">
+                    <div className="h-7 w-7 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
+                      <Wrench size={14} className="text-primary" />
+                    </div>
+                    <div className="terminal-bg rounded-lg overflow-hidden max-w-[85%] w-full">
+                      <div className="flex items-center gap-2 px-4 py-2 border-b border-border">
+                        <span className="text-xs font-mono text-primary font-medium">
+                          omniclaw_pay
+                        </span>
+                        <CheckCircle size={12} className="text-primary ml-auto" />
+                      </div>
+                      <div className="p-4 font-mono text-xs space-y-2">
+                        <div className="text-muted-foreground">// Input</div>
+                        {Object.entries(msg.content.input).map(([k, v]) => (
+                          <div key={k} className="flex gap-2">
+                            <span className="text-accent">{k}:</span>
+                            <span className="text-foreground/80">
+                              {typeof v === "number" ? v : `"${v}"`}
+                            </span>
+                          </div>
+                        ))}
+                        <div className="border-t border-border my-2 pt-2 text-muted-foreground">
+                          // Output
+                        </div>
+                        {Object.entries(msg.content.output).map(([k, v]) => (
+                          <div key={k} className="flex gap-2">
+                            <span className="text-primary">{k}:</span>
+                            <span
+                              className={
+                                k === "status"
+                                  ? "text-primary"
+                                  : k === "guard_check"
+                                    ? "text-primary"
+                                    : "text-foreground/80"
+                              }
+                            >
+                              {typeof v === "number" ? v : `"${v}"`}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
+
+              // assistant
+              return (
+                <div key={i} className="flex gap-3">
+                  <div className="h-7 w-7 rounded-lg bg-accent/10 flex items-center justify-center shrink-0 mt-0.5">
+                    <Bot size={14} className="text-accent" />
+                  </div>
+                  <div className="text-sm text-foreground/80 max-w-[85%] leading-relaxed">
+                    {msg.content as string}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default MCPToolHighlight;
