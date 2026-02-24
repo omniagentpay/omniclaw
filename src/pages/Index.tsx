@@ -5,6 +5,8 @@ import ProtocolSwitcher from "@/components/ProtocolSwitcher";
 import GuardDashboard from "@/components/GuardDashboard";
 import MCPToolHighlight from "@/components/MCPToolHighlight";
 import TrustedBy from "@/components/TrustedBy";
+import QuickStart from "@/components/QuickStart";
+import SiteFooter from "@/components/SiteFooter";
 
 const Index = () => {
   return (
@@ -15,22 +17,9 @@ const Index = () => {
       <ProtocolSwitcher />
       <GuardDashboard />
       <MCPToolHighlight />
+      <QuickStart />
       <TrustedBy />
-
-      {/* Footer */}
-      <footer className="border-t border-border py-12 px-6">
-        <div className="container mx-auto max-w-6xl flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <div className="h-6 w-6 rounded-md bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-xs">O</span>
-            </div>
-            <span className="font-display font-semibold text-sm text-foreground">OmniClaw</span>
-          </div>
-          <p className="text-xs text-muted-foreground">
-            © 2026 OmniAgentPay, Inc. All rights reserved.
-          </p>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 };
