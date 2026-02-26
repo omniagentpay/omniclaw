@@ -1,6 +1,9 @@
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import MeshBackground from "@/components/MeshBackground";
+import LiveFlow from "@/components/LiveFlow";
+import VerticalStream from "@/components/VerticalStream";
+import InfraFeatures from "@/components/InfraFeatures";
 import SafetyKernel from "@/components/SafetyKernel";
 import ProtocolSwitcher from "@/components/ProtocolSwitcher";
 import GuardDashboard from "@/components/GuardDashboard";
@@ -16,6 +19,9 @@ const Index = () => {
       <div className="relative" style={{ zIndex: 2 }}>
         <Navbar />
         <HeroSection />
+        <LiveFlow />
+        <InfraFeatures />
+        <VerticalStream />
         <SafetyKernel />
         <ProtocolSwitcher />
         <GuardDashboard />
