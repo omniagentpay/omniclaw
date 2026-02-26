@@ -10,6 +10,7 @@ import GuardDashboard from "@/components/GuardDashboard";
 import MCPToolHighlight from "@/components/MCPToolHighlight";
 import TrustedBy from "@/components/TrustedBy";
 import QuickStart from "@/components/QuickStart";
+import GlobalStandards from "@/components/GlobalStandards";
 import SiteFooter from "@/components/SiteFooter";
 
 const Index = () => {
@@ -28,6 +29,7 @@ const Index = () => {
         <MCPToolHighlight />
         <QuickStart />
         <TrustedBy />
+        <GlobalStandards />
         <SiteFooter />
       </div>
     </div>

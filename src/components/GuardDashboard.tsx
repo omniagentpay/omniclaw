@@ -7,12 +7,13 @@ const GuardDashboard = () => {
   const limit = 50;
 
   useEffect(() => {
+    // Reduce update frequency for better performance
     const interval = setInterval(() => {
       setSpent((prev) => {
         if (prev >= 31.2) return 28.5;
-        return prev + 0.03;
+        return prev + 0.06; // Double increment to maintain same visual speed
       });
-    }, 100);
+    }, 200); // Reduced from 100ms to 200ms
     return () => clearInterval(interval);
   }, []);
 
@@ -27,17 +28,17 @@ const GuardDashboard = () => {
   ];
 
   return (
-    <section className="relative py-32 px-6 md:px-12 lg:px-20">
-      <div className="container mx-auto max-w-6xl">
+    <section className="relative py-16 sm:py-20 md:py-24 lg:py-32 px-4 xs:px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-24">
+      <div className="container mx-auto max-w-6xl xl:max-w-7xl 2xl:max-w-[90rem] 3xl:max-w-[100rem]">
         <ScrollReveal>
-          <div className="text-center mb-16">
-            <p className="text-sm font-mono text-accent tracking-widest uppercase mb-4">Runtime Protection</p>
-            <h2 className="font-display font-bold text-3xl md:text-5xl text-foreground tracking-tight mb-4">Atomic Guard</h2>
-            <p className="text-muted-foreground text-lg max-w-xl mx-auto">Every transaction is validated against programmable rules in real time. No exceptions.</p>
+          <div className="text-center mb-10 sm:mb-12 md:mb-16">
+            <p className="text-xs sm:text-sm font-mono text-accent tracking-widest uppercase mb-3 sm:mb-4">Runtime Protection</p>
+            <h2 className="font-display font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl text-foreground tracking-tight mb-3 sm:mb-4">Atomic Guard</h2>
+            <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-xl xl:max-w-2xl mx-auto">Every transaction is validated against programmable rules in real time. No exceptions.</p>
           </div>
         </ScrollReveal>
 
-        <div className="grid md:grid-cols-5 gap-4 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-3 sm:gap-4 max-w-5xl xl:max-w-6xl 2xl:max-w-7xl mx-auto">
           <ScrollReveal className="md:col-span-3">
             <div className="glass-card p-6 h-full">
               <div className="flex items-center justify-between mb-6">

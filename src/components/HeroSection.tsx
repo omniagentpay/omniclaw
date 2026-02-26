@@ -8,14 +8,17 @@ const HeroSection = () => {
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end start"],
+    layoutEffect: false, // Use regular effect for better performance
   });
 
-  const fontWeight = useTransform(scrollYProgress, [0, 0.5], [900, 300]);
+  const fontWeight = useTransform(scrollYProgress, [0, 0.5], [900, 300], {
+    clamp: true, // Prevent unnecessary calculations
+  });
 
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-screen flex flex-col items-center justify-center px-6 pt-16 overflow-hidden"
+      className="relative min-h-screen flex flex-col items-center justify-center px-4 xs:px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-24 pt-14 sm:pt-16 overflow-hidden"
     >
       {/* Subtle grid pattern */}
       <div
@@ -30,24 +33,14 @@ const HeroSection = () => {
       {/* 3D Shield behind text */}
       <Shield3D />
 
-      <div className="relative z-10 max-w-6xl mx-auto">
+      <div className="relative z-10 w-full max-w-6xl xl:max-w-7xl 2xl:max-w-[90rem] 3xl:max-w-[100rem] mx-auto">
         {/* Asymmetric layout - headline offset left */}
-        <div className="ml-0 md:-ml-8 lg:-ml-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-          >
-            <p className="text-sm font-mono text-primary tracking-widest uppercase mb-6">
-              Powered by OmniAgentPay
-            </p>
-          </motion.div>
-
+        <div className="ml-0 md:-ml-4 lg:-ml-8 xl:-ml-12 2xl:-ml-16">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-[6.5rem] tracking-tight leading-[0.88] mb-8"
+            className="font-display text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[6.5rem] 2xl:text-[7.5rem] 3xl:text-[9rem] tracking-tight leading-[0.88] mb-6 sm:mb-7 md:mb-8"
             style={{ fontWeight }}
           >
             <span className="text-foreground">Agents Think.</span>
@@ -60,7 +53,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.35 }}
-          className="text-lg md:text-xl text-muted-foreground max-w-2xl mb-14 leading-relaxed md:ml-8"
+          className="text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground max-w-2xl xl:max-w-3xl mb-10 sm:mb-12 md:mb-14 leading-relaxed md:ml-4 lg:ml-8"
         >
           The payment infrastructure built for autonomous AI agents.
           Programmable wallets. Real-time settlement. Zero human friction.
@@ -70,7 +63,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.5 }}
-          className="max-w-2xl md:ml-8"
+          className="max-w-2xl xl:max-w-3xl md:ml-4 lg:ml-8"
         >
           <CodeTerminal />
         </motion.div>

@@ -34,14 +34,17 @@ const LiveFlow = () => {
     if (!isInView) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d", { alpha: false });
     if (!ctx) return;
 
     const W = 860;
     const H = 320;
-    canvas.width = W * 2;
-    canvas.height = H * 2;
-    ctx.scale(2, 2);
+    const dpr = Math.min(window.devicePixelRatio || 1, 2); // Cap at 2x for performance
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    canvas.style.width = `${W}px`;
+    canvas.style.height = `${H}px`;
+    ctx.scale(dpr, dpr);
 
     let animId: number;
     let spawnTimer = 0;
@@ -67,11 +70,19 @@ const LiveFlow = () => {
       particlesRef.current.push(p);
     };
 
+    const hslToHsla = (hsl: string, alpha: number): string => {
+      const match = hsl.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/);
+      if (match) {
+        return `hsla(${match[1]}, ${match[2]}%, ${match[3]}%, ${alpha})`;
+      }
+      return hsl;
+    };
+
     const drawRing = (x: number, y: number, label: string, color: string, active: boolean) => {
       // Outer glow
       if (active) {
         const glow = ctx.createRadialGradient(x, y, 20, x, y, 60);
-        glow.addColorStop(0, color.replace(")", " / 0.15)").replace("hsl", "hsl"));
+        glow.addColorStop(0, hslToHsla(color, 0.15));
         glow.addColorStop(1, "transparent");
         ctx.fillStyle = glow;
         ctx.fillRect(x - 60, y - 60, 120, 120);
@@ -88,8 +99,8 @@ const LiveFlow = () => {
       ctx.beginPath();
       ctx.ellipse(x, y, 33, 48, 0, 0, Math.PI * 2);
       ctx.fillStyle = active
-        ? color.replace(")", " / 0.05)").replace("hsl", "hsl")
-        : "hsl(220, 20%, 7% / 0.3)";
+        ? hslToHsla(color, 0.05)
+        : "hsla(220, 20%, 7%, 0.3)";
       ctx.fill();
 
       // Label
@@ -122,7 +133,7 @@ const LiveFlow = () => {
       ctx.arc(60, 160, 14, 0, Math.PI * 2);
       ctx.fillStyle = "hsl(220, 20%, 10%)";
       ctx.fill();
-      ctx.strokeStyle = "hsl(75, 100%, 50% / 0.5)";
+      ctx.strokeStyle = "hsla(75, 100%, 50%, 0.5)";
       ctx.lineWidth = 1.5;
       ctx.stroke();
       ctx.font = "600 9px Inter, sans-serif";
@@ -138,7 +149,7 @@ const LiveFlow = () => {
       ctx.arc(800, 160, 14, 0, Math.PI * 2);
       ctx.fillStyle = "hsl(220, 20%, 10%)";
       ctx.fill();
-      ctx.strokeStyle = "hsl(190, 100%, 50% / 0.5)";
+      ctx.strokeStyle = "hsla(190, 100%, 50%, 0.5)";
       ctx.lineWidth = 1.5;
       ctx.stroke();
       ctx.font = "600 8px Inter, sans-serif";
@@ -208,33 +219,33 @@ const LiveFlow = () => {
           if (p.phase === "dissipating") {
             // Red dissipation glow
             const rGlow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 6);
-            rGlow.addColorStop(0, `hsl(0, 80%, 55% / ${p.alpha * 0.4})`);
+            rGlow.addColorStop(0, `hsla(0, 80%, 55%, ${p.alpha * 0.4})`);
             rGlow.addColorStop(1, "transparent");
             ctx.fillStyle = rGlow;
             ctx.fillRect(p.x - p.size * 6, p.y - p.size * 6, p.size * 12, p.size * 12);
 
             ctx.beginPath();
             ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-            ctx.fillStyle = `hsl(0, 80%, 55% / ${p.alpha})`;
+            ctx.fillStyle = `hsla(0, 80%, 55%, ${p.alpha})`;
             ctx.fill();
           } else {
             // Golden particle with trail
             const trail = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 4);
-            trail.addColorStop(0, `hsl(45, 100%, 60% / ${p.alpha * 0.5})`);
+            trail.addColorStop(0, `hsla(45, 100%, 60%, ${p.alpha * 0.5})`);
             trail.addColorStop(1, "transparent");
             ctx.fillStyle = trail;
             ctx.fillRect(p.x - p.size * 4, p.y - p.size * 4, p.size * 8, p.size * 8);
 
             ctx.beginPath();
             ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-            ctx.fillStyle = `hsl(45, 100%, 65% / ${p.alpha})`;
+            ctx.fillStyle = `hsla(45, 100%, 65%, ${p.alpha})`;
             ctx.fill();
 
             // Light trail
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p.x - 20, p.y);
-            ctx.strokeStyle = `hsl(45, 100%, 55% / ${p.alpha * 0.3})`;
+            ctx.strokeStyle = `hsla(45, 100%, 55%, ${p.alpha * 0.3})`;
             ctx.lineWidth = p.size * 0.8;
             ctx.stroke();
           }
@@ -259,17 +270,17 @@ const LiveFlow = () => {
   }, [isInView]);
 
   return (
-    <section ref={containerRef} className="relative py-32 px-6 md:px-12 lg:px-20">
-      <div className="container mx-auto max-w-6xl">
+    <section ref={containerRef} className="relative py-16 sm:py-20 md:py-24 lg:py-32 px-4 xs:px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-24" style={{ position: "relative" }}>
+      <div className="container mx-auto max-w-6xl xl:max-w-7xl 2xl:max-w-[90rem] 3xl:max-w-[100rem]" style={{ position: "relative" }}>
         <ScrollReveal>
-          <div className="text-center mb-16">
-            <p className="text-sm font-mono text-primary tracking-widest uppercase mb-4">
+          <div className="text-center mb-10 sm:mb-12 md:mb-16">
+            <p className="text-xs sm:text-sm font-mono text-primary tracking-widest uppercase mb-3 sm:mb-4">
               Core Infrastructure
             </p>
-            <h2 className="font-display font-bold text-3xl md:text-5xl text-foreground tracking-tight mb-4">
+            <h2 className="font-display font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl text-foreground tracking-tight mb-3 sm:mb-4">
               Live Payment Flow
             </h2>
-            <p className="text-muted-foreground text-lg max-w-xl mx-auto">
+            <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-xl xl:max-w-2xl mx-auto">
               Watch USDC flow through programmable guard rings in real time.
             </p>
           </div>
@@ -280,7 +291,11 @@ const LiveFlow = () => {
             <canvas
               ref={canvasRef}
               className="w-full"
-              style={{ maxHeight: "320px", aspectRatio: "860 / 320" }}
+              style={{ 
+                maxHeight: "320px", 
+                aspectRatio: "860 / 320",
+                willChange: "contents", // Optimize canvas rendering
+              }}
             />
             <motion.div
               className="mt-4 text-center"

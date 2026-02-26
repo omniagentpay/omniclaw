@@ -7,7 +7,10 @@ const Shield3D = () => {
         animate={{ rotateY: [0, 360] }}
         transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
         className="relative"
-        style={{ transformStyle: "preserve-3d" }}
+        style={{ 
+          transformStyle: "preserve-3d",
+          willChange: "transform", // GPU acceleration hint
+        }}
       >
         {/* Shield shape - translucent hexagonal layers */}
         <svg width="420" height="480" viewBox="0 0 420 480" fill="none" className="opacity-[0.07]">

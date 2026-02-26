@@ -65,6 +65,7 @@ const InfraFeatures = () => {
             : "radial-gradient(ellipse 60% 50% at 50% 50%, transparent, transparent)",
         }}
         transition={{ duration: 0.8, ease: "easeInOut" }}
+        style={{ willChange: "background" }} // GPU acceleration hint
       />
 
       <div className="container mx-auto max-w-6xl relative z-10">
