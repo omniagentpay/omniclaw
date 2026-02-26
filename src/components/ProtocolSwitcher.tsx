@@ -68,7 +68,7 @@ const ProtocolSwitcher = () => {
   const ActiveIcon = active.icon;
 
   return (
-    <section className="relative py-32 px-6">
+    <section className="relative py-32 px-6 md:px-12 lg:px-20">
       <div className="container mx-auto max-w-6xl">
         <ScrollReveal>
           <div className="text-center mb-16">

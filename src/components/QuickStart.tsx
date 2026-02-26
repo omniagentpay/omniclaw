@@ -130,7 +130,7 @@ const QuickStart = () => {
   const [openStep, setOpenStep] = useState<number | null>(0);
 
   return (
-    <section className="relative py-32 px-6 border-t border-border" id="get-started">
+    <section className="relative py-32 px-6 md:px-12 lg:px-20" id="get-started">
       <div className="container mx-auto max-w-6xl">
         <ScrollReveal>
           <div className="text-center mb-16">
