@@ -2,22 +2,48 @@ import { useEffect, useRef } from "react";
 
 const MeshBackground = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
+    const container = containerRef.current;
+    if (!canvas || !container) return;
+    const ctx = canvas.getContext("2d", { alpha: false });
     if (!ctx) return;
 
-    let animationId: number;
+    let animationId: number | null = null;
     let time = 0;
+    let isVisible = true;
+
+    // Use IntersectionObserver to pause when not visible
+    const observer = new IntersectionObserver(
+      (entries) => {
+        isVisible = entries[0].isIntersecting;
+        if (isVisible && !animationId) {
+          draw();
+        } else if (!isVisible && animationId) {
+          cancelAnimationFrame(animationId);
+          animationId = null;
+        }
+      },
+      { threshold: 0 }
+    );
+    observer.observe(container);
 
     const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = document.documentElement.scrollHeight;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2); // Cap at 2x for performance
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
+      ctx.scale(dpr, dpr);
     };
     resize();
-    window.addEventListener("resize", resize);
+    const resizeHandler = () => {
+      resize();
+      if (!animationId && isVisible) draw();
+    };
+    window.addEventListener("resize", resizeHandler, { passive: true });
 
     const blobs = [
       { x: 0.2, y: 0.15, r: 400, color: [30, 30, 60], speed: 0.0003 },
@@ -30,9 +56,14 @@ const MeshBackground = () => {
     ];
 
     const draw = () => {
+      if (!isVisible) {
+        animationId = null;
+        return;
+      }
+
       time += 1;
-      const w = canvas.width;
-      const h = canvas.height;
+      const w = window.innerWidth;
+      const h = window.innerHeight;
 
       ctx.fillStyle = "hsl(220, 25%, 4%)";
       ctx.fillRect(0, 0, w, h);
@@ -50,20 +81,21 @@ const MeshBackground = () => {
       animationId = requestAnimationFrame(draw);
     };
 
-    draw();
+    if (isVisible) draw();
 
     return () => {
-      cancelAnimationFrame(animationId);
-      window.removeEventListener("resize", resize);
+      if (animationId) cancelAnimationFrame(animationId);
+      observer.disconnect();
+      window.removeEventListener("resize", resizeHandler);
     };
   }, []);
 
   return (
-    <>
+    <div ref={containerRef} className="fixed inset-0 pointer-events-none" style={{ zIndex: 0 }}>
       <canvas
         ref={canvasRef}
-        className="fixed inset-0 w-full h-full pointer-events-none"
-        style={{ zIndex: 0 }}
+        className="w-full h-full"
+        style={{ willChange: "contents" }}
       />
       {/* Film grain noise overlay */}
       <div
@@ -76,7 +108,7 @@ const MeshBackground = () => {
           backgroundSize: "256px 256px",
         }}
       />
-    </>
+    </div>
   );
 };
 

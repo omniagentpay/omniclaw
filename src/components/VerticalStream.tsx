@@ -109,6 +109,7 @@ const VerticalStream = () => {
                       className="glass-card px-5 py-4 flex items-center justify-between origin-top"
                       style={{
                         transformStyle: "preserve-3d",
+                        willChange: "transform, opacity", // GPU acceleration hint
                         transform: `perspective(1200px) rotateX(${i * -1.5}deg) scale(${scale})`,
                       }}
                     >

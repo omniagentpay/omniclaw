@@ -56,7 +56,7 @@ const SiteFooter = () => {
           {/* Bottom bar */}
           <div className="mt-16 pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-xs text-muted-foreground">
-              © 2026 OmniAgentPay, Inc. All rights reserved.
+              © 2026 OmniClaw, Inc. All rights reserved.
             </p>
             <div className="flex items-center gap-6">
               <a href="#" className="text-xs text-muted-foreground hover:text-foreground transition-colors">

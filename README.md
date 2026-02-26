@@ -1,22 +1,16 @@
-# Welcome to your Lovable project
+# OmniClaw
 
-## Project info
+> **The Payment Execution Infrastructure for AI Agents**
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## Project Overview
 
-## How can I edit this code?
+OmniClaw gives AI agents the ability to autonomously spend money—safely, instantly, and across any blockchain. It's the first SDK to combine **payment execution**, **agent identity verification** (ERC-8004), and **enterprise-grade resilience** in a single library.
 
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
+## Development
 
 **Use your preferred IDE**
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+If you want to work locally using your own IDE, you can clone this repo and push changes.
 
 The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
@@ -62,12 +56,14 @@ This project is built with:
 
 ## How can I deploy this project?
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+Build the project for production:
 
-## Can I connect a custom domain to my Lovable project?
+\`\`\`bash
+npm run build
+\`\`\`
 
-Yes, you can!
+The built files will be in the \`dist\` directory, ready to be deployed to any static hosting service.
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## Documentation
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Visit the [documentation](/docs) to learn more about OmniClaw's features, API reference, and integration guides.
