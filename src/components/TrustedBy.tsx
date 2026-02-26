@@ -7,7 +7,7 @@ const brands = [
 
 const TrustedBy = () => {
   return (
-    <section className="relative py-24 px-6 border-t border-border">
+    <section className="relative py-24 px-6 md:px-12 lg:px-20 border-t border-glass-border">
       <div className="container mx-auto max-w-4xl">
         <ScrollReveal>
           <p className="text-center text-xs font-mono text-muted-foreground tracking-widest uppercase mb-12">

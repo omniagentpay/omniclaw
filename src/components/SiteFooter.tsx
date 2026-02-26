@@ -9,7 +9,7 @@ const footerLinks = {
 
 const SiteFooter = () => {
   return (
-    <footer className="border-t border-border">
+    <footer className="border-t border-glass-border bg-background/30 backdrop-blur-xl">
       <ScrollReveal>
         <div className="container mx-auto max-w-6xl px-6 py-16">
           <div className="grid grid-cols-2 md:grid-cols-5 gap-10">

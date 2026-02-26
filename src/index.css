@@ -80,7 +80,9 @@
 
 @layer components {
   .glass-card {
-    @apply bg-card/60 backdrop-blur-xl border border-glass-border rounded-lg;
+    @apply backdrop-blur-2xl border border-glass-border rounded-lg;
+    background: hsl(220 20% 7% / 0.5);
+    border: 1px solid hsl(220 15% 18% / 0.4);
   }
 
   .glass-card-hover {
