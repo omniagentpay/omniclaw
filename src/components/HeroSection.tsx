@@ -34,8 +34,8 @@ const HeroSection = () => {
       <Shield3D />
 
       <div className="relative z-10 w-full max-w-6xl xl:max-w-7xl 2xl:max-w-[90rem] 3xl:max-w-[100rem] mx-auto">
-        {/* Asymmetric layout - headline offset left */}
-        <div className="ml-0 md:-ml-4 lg:-ml-8 xl:-ml-12 2xl:-ml-16">
+        {/* Center-aligned layout consistent with rest of site */}
+        <div className="text-center">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -47,26 +47,26 @@ const HeroSection = () => {
             <br />
             <span className="text-gradient-lime">We Handle the Money.</span>
           </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.35 }}
+            className="text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground max-w-2xl xl:max-w-3xl mx-auto mb-10 sm:mb-12 md:mb-14 leading-relaxed"
+          >
+            The payment infrastructure built for autonomous AI agents.
+            Programmable wallets. Real-time settlement. Zero human friction.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.5 }}
+            className="max-w-2xl xl:max-w-3xl mx-auto"
+          >
+            <CodeTerminal />
+          </motion.div>
         </div>
-
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.35 }}
-          className="text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground max-w-2xl xl:max-w-3xl mb-10 sm:mb-12 md:mb-14 leading-relaxed md:ml-4 lg:ml-8"
-        >
-          The payment infrastructure built for autonomous AI agents.
-          Programmable wallets. Real-time settlement. Zero human friction.
-        </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.5 }}
-          className="max-w-2xl xl:max-w-3xl md:ml-4 lg:ml-8"
-        >
-          <CodeTerminal />
-        </motion.div>
       </div>
 
       {/* Bottom fade */}

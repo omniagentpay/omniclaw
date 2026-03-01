@@ -1,60 +1,32 @@
 import { motion } from "framer-motion";
-import { Award, Shield, CheckCircle2, Star, Trophy, Medal } from "lucide-react";
-import { useState } from "react";
+import { Award, Shield, CheckCircle2, Star, Trophy, Medal, Play, Image as ImageIcon, Loader2, ChevronLeft, ChevronRight, X, ExternalLink } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useGlobalStandardsContent, getIconComponent } from "@/hooks/useGlobalStandards";
+import { GlobalStandardsContent as ContentType } from "@/types/globalStandards";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
-const awards = [
-  {
-    id: 1,
-    title: "Security Excellence",
-    issuer: "Blockchain Security Alliance",
-    year: "2024",
-    icon: Shield,
-    height: "h-48",
-  },
-  {
-    id: 2,
-    title: "Innovation Award",
-    issuer: "Web3 Foundation",
-    year: "2024",
-    icon: Star,
-    height: "h-64",
-  },
-  {
-    id: 3,
-    title: "Best Infrastructure",
-    issuer: "Ethereum Foundation",
-    year: "2024",
-    icon: Trophy,
-    height: "h-56",
-  },
-  {
-    id: 4,
-    title: "Developer Choice",
-    issuer: "DeveloperDAO",
-    year: "2024",
-    icon: Medal,
-    height: "h-52",
-  },
-  {
-    id: 5,
-    title: "Audit Certified",
-    issuer: "Trail of Bits",
-    year: "2024",
-    icon: CheckCircle2,
-    height: "h-60",
-  },
-];
+// Convert database content to component format
+const mapContentToItem = (content: ContentType) => {
+  const Icon = getIconComponent(content.icon_name);
+  return {
+    id: content.id,
+    type: content.type,
+    title: content.title,
+    issuer: content.issuer || undefined,
+    year: content.year || undefined,
+    icon: Icon,
+    height: content.height || undefined,
+    label: content.label || undefined,
+    videoUrl: content.video_url || undefined,
+    videoThumbnail: content.video_thumbnail || undefined,
+    videoSource: content.video_source || undefined,
+    imageUrl: content.image_url || undefined,
+    imageAlt: content.image_alt || undefined,
+    certificationBadge: content.certification_badge || undefined,
+    linkUrl: content.link_url || undefined,
+  };
+};
 
-const certifications = [
-  { id: 1, name: "SOC 2", angle: 0 },
-  { id: 2, name: "ISO 27001", angle: 45 },
-  { id: 3, name: "GDPR", angle: 90 },
-  { id: 4, name: "HIPAA", angle: 135 },
-  { id: 5, name: "PCI DSS", angle: 180 },
-  { id: 6, name: "CCPA", angle: 225 },
-  { id: 7, name: "NIST", angle: 270 },
-  { id: 8, name: "FIDO2", angle: 315 },
-];
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -79,128 +51,369 @@ const itemVariants = {
   },
 };
 
-const HolographicCard = ({ award, index }: { award: typeof awards[0]; index: number }) => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [isHovered, setIsHovered] = useState(false);
-  const Icon = award.icon;
+// Media Gallery Component
+const MediaGallery = ({ 
+  items, 
+  currentIndex, 
+  isOpen, 
+  onClose, 
+  onNavigate 
+}: { 
+  items: ReturnType<typeof mapContentToItem>[];
+  currentIndex: number;
+  isOpen: boolean;
+  onClose: () => void;
+  onNavigate: (index: number) => void;
+}) => {
+  const currentItem = items[currentIndex];
+  const hasNext = currentIndex < items.length - 1;
+  const hasPrev = currentIndex > 0;
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    setMousePosition({
-      x: ((e.clientX - rect.left) / rect.width) * 100,
-      y: ((e.clientY - rect.top) / rect.height) * 100,
-    });
+  // Get video embed URL
+  const getVideoEmbedUrl = (item: ReturnType<typeof mapContentToItem>) => {
+    if (!item.videoUrl) return null;
+    
+    if (item.videoSource === 'youtube') {
+      return `https://www.youtube.com/embed/${item.videoUrl}?autoplay=1`;
+    } else if (item.videoSource === 'vimeo') {
+      return `https://player.vimeo.com/video/${item.videoUrl}?autoplay=1`;
+    }
+    
+    if (item.videoUrl.includes('youtube.com') || item.videoUrl.includes('youtu.be')) {
+      const youtubeId = item.videoUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/)?.[1];
+      if (youtubeId) {
+        return `https://www.youtube.com/embed/${youtubeId}?autoplay=1`;
+      }
+    }
+    
+    if (item.videoUrl.includes('vimeo.com')) {
+      const vimeoId = item.videoUrl.match(/vimeo\.com\/(\d+)/)?.[1];
+      if (vimeoId) {
+        return `https://player.vimeo.com/video/${vimeoId}?autoplay=1`;
+      }
+    }
+    
+    return item.videoUrl;
   };
 
-  return (
-    <motion.div
-      variants={itemVariants}
-      className={`${award.height} relative overflow-hidden rounded-xl glass-card group cursor-pointer`}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      style={{
-        background: isHovered
-          ? `radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%, 
-             hsl(75 100% 50% / 0.1) 0%, 
-             hsl(220 20% 7% / 0.8) 50%)`
-          : "hsl(220 20% 7% / 0.5)",
-      }}
-    >
-      {/* Shine effect - mimics light hitting a physical trophy */}
-      <div
-        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none overflow-hidden rounded-xl"
-        style={{
-          background: `radial-gradient(
-            ellipse 200% 100% at ${mousePosition.x}% ${mousePosition.y}%,
-            hsl(75 100% 50% / 0.4) 0%,
-            hsl(190 100% 50% / 0.2) 30%,
-            transparent 60%
-          )`,
-        }}
-      />
-      
-      {/* Moving shine highlight */}
-      <div
-        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-        style={{
-          background: `linear-gradient(
-            ${Math.atan2(mousePosition.y - 50, mousePosition.x - 50) * (180 / Math.PI) + 90}deg,
-            transparent 0%,
-            transparent ${Math.max(0, mousePosition.x - 30)}%,
-            hsl(0 0% 100% / 0.3) ${mousePosition.x - 10}%,
-            hsl(75 100% 50% / 0.5) ${mousePosition.x}%,
-            hsl(190 100% 50% / 0.3) ${mousePosition.x + 10}%,
-            transparent ${Math.min(100, mousePosition.x + 30)}%,
-            transparent 100%
-          )`,
-          transform: `translate(${(mousePosition.x - 50) * 0.05}px, ${(mousePosition.y - 50) * 0.05}px)`,
-        }}
-      />
-      
-      {/* Holographic gradient border */}
-      <div
-        className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-        style={{
-          background: `conic-gradient(
-            from ${mousePosition.x * 3.6}deg at ${mousePosition.x}% ${mousePosition.y}%,
-            hsl(75 100% 50% / 0.4),
-            hsl(190 100% 50% / 0.4),
-            hsl(75 100% 50% / 0.4)
-          )`,
-          mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-          maskComposite: "xor",
-          WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-          WebkitMaskComposite: "xor",
-          padding: "1px",
-        }}
-      />
+  // Keyboard navigation
+  useEffect(() => {
+    if (!isOpen) return;
 
-      <div className="relative h-full p-6 flex flex-col justify-between z-10">
-        <div className="flex items-start justify-between mb-4">
-          <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-            <Icon className="h-6 w-6 text-primary" />
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft' && hasPrev) {
+        onNavigate(currentIndex - 1);
+      } else if (e.key === 'ArrowRight' && hasNext) {
+        onNavigate(currentIndex + 1);
+      } else if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, currentIndex, hasNext, hasPrev, onNavigate, onClose]);
+
+  if (!currentItem) return null;
+
+  const hasVideo = currentItem.videoUrl || currentItem.videoThumbnail;
+  const embedUrl = hasVideo ? getVideoEmbedUrl(currentItem) : null;
+  const isEmbedded = embedUrl && (currentItem.videoSource === 'youtube' || currentItem.videoSource === 'vimeo' || embedUrl.includes('youtube.com') || embedUrl.includes('vimeo.com'));
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-7xl w-full h-[90vh] p-0 bg-background border-border [&>button]:hidden">
+        <div className="relative w-full h-full flex items-center justify-center">
+          {/* Custom Close Button */}
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 z-50 h-10 w-10 rounded-full bg-background/90 backdrop-blur-sm border border-border flex items-center justify-center hover:bg-background transition-colors"
+          >
+            <X className="h-5 w-5 text-foreground" />
+          </button>
+
+          {/* Previous Button */}
+          {hasPrev && (
+            <button
+              onClick={() => onNavigate(currentIndex - 1)}
+              className="absolute left-4 z-50 h-12 w-12 rounded-full bg-background/90 backdrop-blur-sm border border-border flex items-center justify-center hover:bg-background transition-colors"
+            >
+              <ChevronLeft className="h-6 w-6 text-foreground" />
+            </button>
+          )}
+
+          {/* Next Button */}
+          {hasNext && (
+            <button
+              onClick={() => onNavigate(currentIndex + 1)}
+              className="absolute right-4 z-50 h-12 w-12 rounded-full bg-background/90 backdrop-blur-sm border border-border flex items-center justify-center hover:bg-background transition-colors"
+            >
+              <ChevronRight className="h-6 w-6 text-foreground" />
+            </button>
+          )}
+
+          {/* Media Content */}
+          <div className="w-full h-full flex flex-col items-center justify-center p-8">
+            {hasVideo ? (
+              <div className="w-full h-full max-w-6xl">
+                {isEmbedded ? (
+                  <iframe
+                    src={embedUrl || undefined}
+                    className="w-full h-full rounded-lg"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    title={currentItem.title}
+                  />
+                ) : (
+                  <video
+                    src={embedUrl || currentItem.videoUrl || undefined}
+                    className="w-full h-full rounded-lg"
+                    controls
+                    autoPlay
+                    playsInline
+                  >
+                    Your browser does not support the video tag.
+                  </video>
+                )}
+              </div>
+            ) : currentItem.imageUrl ? (
+              <div className="w-full h-full flex items-center justify-center">
+                <img
+                  src={currentItem.imageUrl}
+                  alt={currentItem.imageAlt || currentItem.title}
+                  className="max-w-full max-h-full object-contain rounded-lg"
+                />
+              </div>
+            ) : null}
+
+            {/* Info Panel */}
+            <div className="mt-6 w-full max-w-6xl text-center">
+              <h3 className="font-display font-semibold text-xl text-foreground mb-2">
+                {currentItem.title}
+              </h3>
+              {currentItem.issuer && (
+                <p className="text-sm text-muted-foreground mb-2">{currentItem.issuer}</p>
+              )}
+              {currentItem.label && (
+                <span className="inline-block text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-md border border-primary/20 mb-2">
+                  {currentItem.label}
+                </span>
+              )}
+              {currentItem.year && (
+                <p className="text-xs font-mono text-muted-foreground">{currentItem.year}</p>
+              )}
+            </div>
+
+            {/* Navigation Dots */}
+            {items.length > 1 && (
+              <div className="mt-4 flex gap-2">
+                {items.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => onNavigate(idx)}
+                    className={`h-2 rounded-full transition-all ${
+                      idx === currentIndex
+                        ? 'w-8 bg-primary'
+                        : 'w-2 bg-muted-foreground/30 hover:bg-muted-foreground/50'
+                    }`}
+                  />
+                ))}
+              </div>
+            )}
           </div>
-          <span className="text-xs font-mono text-muted-foreground">{award.year}</span>
         </div>
-        
-        <div>
-          <h3 className="font-display font-bold text-lg text-foreground mb-2 group-hover:text-primary transition-colors">
-            {award.title}
-          </h3>
-          <p className="text-sm text-muted-foreground font-mono">{award.issuer}</p>
-        </div>
-      </div>
-    </motion.div>
+      </DialogContent>
+    </Dialog>
   );
 };
 
-const CertificationBadge = ({ cert, index }: { cert: typeof certifications[0]; index: number }) => {
-  const radius = 140;
-  const angleRad = (cert.angle * Math.PI) / 180;
-  const x = Math.cos(angleRad) * radius;
-  const y = Math.sin(angleRad) * radius;
+const ContentCard = ({ 
+  item, 
+  index, 
+  onOpenGallery 
+}: { 
+  item: ReturnType<typeof mapContentToItem>; 
+  index: number;
+  onOpenGallery: (index: number) => void;
+}) => {
+  const Icon = item.icon;
+  const hasVideo = item.videoUrl || item.videoThumbnail;
+  const hasImage = item.imageUrl;
+  const hasMedia = hasVideo || hasImage;
 
   return (
     <motion.div
       variants={itemVariants}
-      className="absolute"
-      style={{
-        left: `calc(50% + ${x}px)`,
-        top: `calc(50% + ${y}px)`,
-        transform: "translate(-50%, -50%)",
-      }}
+      className={`${item.height || 'h-auto'} relative overflow-hidden rounded-lg border border-border bg-card group hover:border-primary/50 transition-colors flex flex-col`}
     >
-      <div className="glass-card px-4 py-2 rounded-full border border-glass-border hover:border-primary/50 transition-colors">
-        <span className="text-xs font-mono text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap">
-          {cert.name}
-        </span>
+      <div className="relative h-full p-6 flex flex-col flex-1">
+        {/* Header - Icon Only */}
+        {Icon && (
+          <div className="mb-4">
+            <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center">
+              <Icon className="h-6 w-6 text-primary" />
+            </div>
+          </div>
+        )}
+
+        {/* Media Preview in Card Body */}
+        {hasMedia && (
+          <div 
+            className="relative w-full mb-4 rounded-lg overflow-hidden border border-border/50 cursor-pointer group/media"
+            onClick={() => hasMedia && onOpenGallery(index)}
+          >
+            {item.videoThumbnail ? (
+              <>
+                <img
+                  src={item.videoThumbnail}
+                  alt={item.title}
+                  className="w-full h-48 object-cover"
+                  onError={(e) => {
+                    console.error('Failed to load video thumbnail:', item.videoThumbnail);
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
+                <div className="absolute inset-0 bg-black/20 group-hover/media:bg-black/30 transition-colors" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="h-12 w-12 rounded-full bg-background/95 backdrop-blur-sm border-2 border-primary/50 flex items-center justify-center group-hover/media:scale-110 transition-transform">
+                    <Play className="h-6 w-6 text-primary ml-0.5" />
+                  </div>
+                </div>
+              </>
+            ) : item.imageUrl ? (
+              <>
+                <img
+                  src={item.imageUrl}
+                  alt={item.imageAlt || item.title}
+                  className="w-full h-48 object-cover"
+                  onError={(e) => {
+                    console.error('Failed to load image:', item.imageUrl);
+                    console.error('Item details:', { id: item.id, type: item.type, title: item.title });
+                    e.currentTarget.style.display = 'none';
+                  }}
+                  onLoad={() => {
+                    console.log('Image loaded successfully:', item.imageUrl);
+                  }}
+                />
+                <div className="absolute inset-0 bg-black/10 group-hover/media:bg-black/20 transition-colors" />
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/media:opacity-100 transition-opacity">
+                  <div className="h-12 w-12 rounded-full bg-background/95 backdrop-blur-sm border-2 border-primary/50 flex items-center justify-center">
+                    <ImageIcon className="h-6 w-6 text-primary" />
+                  </div>
+                </div>
+              </>
+            ) : null}
+          </div>
+        )}
+        
+        {/* Content */}
+        <div className="flex-1 flex flex-col justify-end">
+          {/* Title with Label Badge */}
+          <div className="mb-2">
+            <h3 className="font-display font-semibold text-base text-foreground mb-2">
+              {item.title}
+            </h3>
+            {item.label && (
+              <span className="inline-block text-xs font-semibold text-primary bg-primary/10 px-2.5 py-1 rounded-md border border-primary/20 mb-2">
+                {item.label}
+              </span>
+            )}
+          </div>
+          
+          {item.issuer && (
+            <p className="text-sm text-muted-foreground mb-3">{item.issuer}</p>
+          )}
+          
+          {/* Footer - Year, Certification Badge, and Link */}
+          <div className="mt-auto pt-3 border-t border-border/50">
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-3 flex-1">
+                {item.year && (
+                  <span className="text-xs font-mono text-muted-foreground">{item.year}</span>
+                )}
+                {item.linkUrl && (
+                  <a
+                    href={item.linkUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="inline-flex items-center gap-1.5 text-xs text-primary hover:text-primary/80 transition-colors group/link"
+                  >
+                    <span className="font-medium">View Submission</span>
+                    <ExternalLink className="h-3 w-3 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
+                  </a>
+                )}
+              </div>
+              {item.certificationBadge && (
+                <p className="text-xs font-mono text-primary text-right">{item.certificationBadge}</p>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     </motion.div>
   );
 };
+
 
 const GlobalStandards = () => {
+  // Fetch content from Supabase
+  const { data: contentItems = [], isLoading: isLoadingContent, error: contentError } = useGlobalStandardsContent();
+
+  // Map database content to component format
+  const mappedContent = contentItems.map(mapContentToItem);
+
+  // Filter items that have media (video or image) for gallery
+  const mediaItems = mappedContent.filter(item => item.videoUrl || item.videoThumbnail || item.imageUrl);
+  
+  // Create a map from original index to media index
+  const originalToMediaIndex = new Map<number, number>();
+  let mediaIdx = 0;
+  mappedContent.forEach((item, idx) => {
+    if (item.videoUrl || item.videoThumbnail || item.imageUrl) {
+      originalToMediaIndex.set(idx, mediaIdx);
+      mediaIdx++;
+    }
+  });
+
+  // Gallery state
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const [galleryIndex, setGalleryIndex] = useState(0);
+
+  // Handle opening gallery from card
+  const handleOpenGallery = (cardIndex: number) => {
+    const mediaIndex = originalToMediaIndex.get(cardIndex);
+    if (mediaIndex !== undefined) {
+      setGalleryIndex(mediaIndex);
+      setGalleryOpen(true);
+    }
+  };
+
+  // Handle gallery navigation
+  const handleGalleryNavigate = (newIndex: number) => {
+    if (newIndex >= 0 && newIndex < mediaItems.length) {
+      setGalleryIndex(newIndex);
+    }
+  };
+
+  // Show loading state
+  if (isLoadingContent) {
+    return (
+      <section className="relative py-16 sm:py-20 md:py-24 lg:py-32 px-4 xs:px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-24 border-t border-glass-border">
+        <div className="container mx-auto max-w-7xl xl:max-w-[90rem] 2xl:max-w-[100rem] 3xl:max-w-[120rem]">
+          <div className="flex items-center justify-center min-h-[400px]">
+            <Loader2 className="h-8 w-8 text-primary animate-spin" />
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Show error state (but still render with fallback data)
+  if (contentError) {
+    console.error('Error loading global standards content:', contentError);
+  }
+
   return (
     <section className="relative py-16 sm:py-20 md:py-24 lg:py-32 px-4 xs:px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-24 border-t border-glass-border">
       <div className="container mx-auto max-w-7xl xl:max-w-[90rem] 2xl:max-w-[100rem] 3xl:max-w-[120rem]">
@@ -223,84 +436,37 @@ const GlobalStandards = () => {
           </p>
         </motion.div>
 
-        {/* Awards Bento Grid */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 mb-16 sm:mb-20 md:mb-24 lg:mb-32"
-        >
-          {awards.map((award, index) => (
-            <HolographicCard key={award.id} award={award} index={index} />
-          ))}
-        </motion.div>
-
-        {/* Certifications Orbit */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
-          className="relative"
-        >
-          <div className="text-center mb-16">
-            <motion.p
-              variants={itemVariants}
-              className="text-xs font-mono text-muted-foreground tracking-widest uppercase mb-8"
-            >
-              Certifications & Compliance
-            </motion.p>
-          </div>
-
-          <div className="relative h-[400px] flex items-center justify-center">
-            {/* Central Seal */}
-            <motion.div
-              variants={itemVariants}
-              className="relative z-10"
-            >
-              <div className="glass-card p-8 rounded-full border-2 border-primary/30 relative">
-                <div className="absolute inset-0 rounded-full bg-primary/5 animate-pulse" />
-                <div className="relative z-10 text-center">
-                  <Shield className="h-16 w-16 text-primary mx-auto mb-4" />
-                  <p className="font-display font-bold text-lg text-foreground mb-1">
-                    Verified by
-                  </p>
-                  <p className="font-display font-bold text-2xl text-primary">
-                    OmniClaw
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Orbiting Certifications */}
-            {certifications.map((cert, index) => (
-              <CertificationBadge key={cert.id} cert={cert} index={index} />
+        {/* Content Grid - Awards, Certifications, Recognitions, Videos, Images */}
+        {mappedContent.length > 0 && (
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 mb-16 sm:mb-20 md:mb-24 lg:mb-32"
+          >
+            {mappedContent.map((item, index) => (
+              <ContentCard 
+                key={item.id} 
+                item={item} 
+                index={index}
+                onOpenGallery={handleOpenGallery}
+              />
             ))}
+          </motion.div>
+        )}
 
-            {/* Connecting lines (optional decorative element) */}
-            <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-20">
-              {certifications.map((cert) => {
-                const radius = 140;
-                const angleRad = (cert.angle * Math.PI) / 180;
-                const x = Math.cos(angleRad) * radius;
-                const y = Math.sin(angleRad) * radius;
-                return (
-                  <line
-                    key={cert.id}
-                    x1="50%"
-                    y1="50%"
-                    x2={`calc(50% + ${x}px)`}
-                    y2={`calc(50% + ${y}px)`}
-                    stroke="currentColor"
-                    strokeWidth="1"
-                    className="text-primary/20"
-                  />
-                );
-              })}
-            </svg>
-          </div>
-        </motion.div>
+        {/* Media Gallery Modal */}
+        {mediaItems.length > 0 && (
+          <MediaGallery
+            items={mediaItems}
+            currentIndex={galleryIndex}
+            isOpen={galleryOpen}
+            onClose={() => setGalleryOpen(false)}
+            onNavigate={handleGalleryNavigate}
+          />
+        )}
+
       </div>
     </section>
   );
