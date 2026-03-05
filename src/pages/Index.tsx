@@ -29,6 +29,9 @@ const Index = () => {
         <section id="infrastructure">
           <InfraFeatures />
         </section>
+        <section id="trust-gate">
+          <ERC8004TrustGate />
+        </section>
         <section id="protocol">
           <ProtocolSwitcher />
         </section>
@@ -46,9 +49,6 @@ const Index = () => {
         </section>
         <section id="safety">
           <SafetyKernel />
-        </section>
-        <section id="trust-gate">
-          <ERC8004TrustGate />
         </section>
         {/* <VerticalStream /> */}
         <section id="dashboard">
