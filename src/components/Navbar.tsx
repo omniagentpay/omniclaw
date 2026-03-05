@@ -1,7 +1,17 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 const Navbar = () => {
-  const links = [
+  const [isProductsOpen, setIsProductsOpen] = useState(false);
+
+  const products = [
+    { label: "OmniCall", href: "/products#omnicall", description: "Voice negotiation system" },
+    { label: "OmniCoreAgent", href: "/products#omnicoreagent", description: "AI agent framework" },
+    { label: "OmniDaemon", href: "/products#omnidaemon", description: "Event-driven runtime" },
+    { label: "OmniMemory", href: "/products#omnimemory", description: "Persistent memory system" },
+  ];
+
+  const otherLinks = [
     { label: "Docs", href: "/docs" },
     { label: "Github", href: "https://github.com/omnuron/omniclaw" },
   ];
@@ -17,7 +27,72 @@ const Navbar = () => {
         </Link>
 
         <div className="flex items-center gap-4 sm:gap-6 md:gap-8">
-          {links.map((link) => (
+          {/* Products Dropdown */}
+          <div
+            className="relative group"
+            onMouseEnter={() => setIsProductsOpen(true)}
+            onMouseLeave={() => setIsProductsOpen(false)}
+          >
+            <button
+              onClick={() => setIsProductsOpen(!isProductsOpen)}
+              className="text-xs sm:text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground flex items-center gap-1"
+            >
+              Products
+              <svg
+                className={`h-4 w-4 transition-transform duration-200 ${
+                  isProductsOpen ? "rotate-180" : ""
+                }`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                />
+              </svg>
+            </button>
+
+            {/* Dropdown Menu */}
+            <div
+              className={`absolute top-full left-0 mt-2 w-48 rounded-lg border border-glass-border bg-card/95 backdrop-blur-xl shadow-lg transition-all duration-200 overflow-hidden ${
+                isProductsOpen
+                  ? "opacity-100 visible translate-y-0"
+                  : "opacity-0 invisible -translate-y-2"
+              }`}
+            >
+              <div className="py-2">
+                {products.map((product) => (
+                  <Link
+                    key={product.label}
+                    to={product.href}
+                    onClick={() => setIsProductsOpen(false)}
+                    className="block px-4 py-2.5 hover:bg-primary/10 transition-colors duration-150 border-l-2 border-transparent hover:border-primary"
+                  >
+                    <div className="text-xs sm:text-sm text-foreground font-medium">
+                      {product.label}
+                    </div>
+                    <div className="text-xs text-muted-foreground mt-0.5">
+                      {product.description}
+                    </div>
+                  </Link>
+                ))}
+                <div className="border-t border-border my-2" />
+                <Link
+                  to="/products"
+                  onClick={() => setIsProductsOpen(false)}
+                  className="block px-4 py-2.5 hover:bg-primary/10 transition-colors duration-150 text-xs sm:text-sm text-primary font-medium"
+                >
+                  View All Products →
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* Other Links */}
+          {otherLinks.map((link) =>
             link.href.startsWith("/") ? (
               <Link
                 key={link.label}
@@ -37,7 +112,8 @@ const Navbar = () => {
                 {link.label}
               </a>
             )
-          ))}
+          )}
+
           <a
             href="#get-started"
             className="btn-shimmer rounded-lg bg-primary px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold text-primary-foreground transition-all duration-200 hover:brightness-110 whitespace-nowrap"

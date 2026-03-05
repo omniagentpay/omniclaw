@@ -2,7 +2,13 @@ import { Link } from "react-router-dom";
 import ScrollReveal from "./ScrollReveal";
 
 const footerLinks = {
-  Product: ["SDK", "Adapters", "Safety Kernel", "Dashboard", "Pricing"],
+  Products: [
+    { label: "OmniCall", href: "/products#omnicall" },
+    { label: "OmniCoreAgent", href: "/products#omnicoreagent" },
+    { label: "OmniDaemon", href: "/products#omnidaemon" },
+    { label: "OmniMemory", href: "/products#omnimemory" },
+  ],
+  Features: ["SDK", "Adapters", "Safety Kernel", "Dashboard", "Pricing"],
   Resources: ["Documentation", "API Reference", "Changelog", "Blog", "Community"],
   Company: [
     { label: "About", href: "/about" },
