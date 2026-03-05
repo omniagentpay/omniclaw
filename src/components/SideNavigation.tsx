@@ -14,6 +14,7 @@ import {
   Users,
   Menu,
   X,
+  Badge,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -27,7 +28,7 @@ interface NavItem {
 const navItems: NavItem[] = [
   { id: "hero", label: "Home", icon: Home },
   { id: "infrastructure", label: "Infrastructure", icon: Layers },
-  { id: "trust-gate", label: "ERC-8004", icon: Award },
+  { id: "trust-gate", label: "ERC-8004", icon: Badge },
   { id: "protocol", label: "Protocol", icon: Zap },
   { id: "mcp", label: "MCP Tools", icon: Code },
   { id: "quickstart", label: "Quick Start", icon: Rocket },
