@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-route
 import { useEffect } from "react";
 import Index from "./pages/Index";
 import Docs from "./pages/Docs";
+import Products from "./pages/Products";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import CookiePolicy from "./pages/CookiePolicy";
@@ -45,6 +46,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/docs" element={<Navigate to="/docs/quickstart" replace />} />
           <Route path="/docs/*" element={<Docs />} />
+          <Route path="/products" element={<Products />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsOfService />} />
           <Route path="/cookies" element={<CookiePolicy />} />
