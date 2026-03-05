@@ -40,7 +40,7 @@ const Navbar = () => {
           ))}
           <a
             href="#get-started"
-            className="btn-shimmer glow-pulse rounded-lg bg-primary px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold text-primary-foreground transition-all duration-200 hover:brightness-110 whitespace-nowrap"
+            className="btn-shimmer rounded-lg bg-primary px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold text-primary-foreground transition-all duration-200 hover:brightness-110 whitespace-nowrap"
           >
             Get Started
           </a>
