@@ -33,6 +33,7 @@ const navItems: NavItem[] = [
   { id: "video", label: "Video", icon: Play },
   { id: "liveflow", label: "Live Flow", icon: Activity },
   { id: "safety", label: "Safety", icon: Shield },
+  { id: "trust-gate", label: "ERC-8004", icon: Award },
   { id: "dashboard", label: "Dashboard", icon: BarChart3 },
   { id: "standards", label: "Standards", icon: Award },
   { id: "trusted", label: "Trusted By", icon: Users },

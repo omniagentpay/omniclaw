@@ -12,6 +12,7 @@ import MCPToolHighlight from "@/components/MCPToolHighlight";
 import TrustedBy from "@/components/TrustedBy";
 import QuickStart from "@/components/QuickStart";
 import GlobalStandards from "@/components/GlobalStandards";
+import ERC8004TrustGate from "@/components/ERC8004TrustGate";
 import SiteFooter from "@/components/SiteFooter";
 import SideNavigation from "@/components/SideNavigation";
 
@@ -27,6 +28,9 @@ const Index = () => {
         </section>
         <section id="infrastructure">
           <InfraFeatures />
+        </section>
+        <section id="trust-gate">
+          <ERC8004TrustGate />
         </section>
         <section id="protocol">
           <ProtocolSwitcher />
