@@ -3,14 +3,7 @@ import HeroSection from "@/components/HeroSection";
 import MeshBackground from "@/components/MeshBackground";
 import VideoPresentation from "@/components/VideoPresentation";
 import LiveFlow from "@/components/LiveFlow";
-import VerticalStream from "@/components/VerticalStream";
-import InfraFeatures from "@/components/InfraFeatures";
-import SafetyKernel from "@/components/SafetyKernel";
-import ProtocolSwitcher from "@/components/ProtocolSwitcher";
-import GuardDashboard from "@/components/GuardDashboard";
-import MCPToolHighlight from "@/components/MCPToolHighlight";
 import TrustedBy from "@/components/TrustedBy";
-import QuickStart from "@/components/QuickStart";
 import GlobalStandards from "@/components/GlobalStandards";
 import ERC8004TrustGate from "@/components/ERC8004TrustGate";
 import SiteFooter from "@/components/SiteFooter";
@@ -26,33 +19,14 @@ const Index = () => {
         <section id="hero">
           <HeroSection />
         </section>
-        <section id="infrastructure">
-          <InfraFeatures />
+        <section id="video">
+          <VideoPresentation />
         </section>
         <section id="trust-gate">
           <ERC8004TrustGate />
         </section>
-        <section id="protocol">
-          <ProtocolSwitcher />
-        </section>
-        <section id="mcp">
-          <MCPToolHighlight />
-        </section>
-        <section id="quickstart">
-          <QuickStart />
-        </section>
-        <section id="video">
-          <VideoPresentation />
-        </section>
         <section id="liveflow">
           <LiveFlow />
-        </section>
-        <section id="safety">
-          <SafetyKernel />
-        </section>
-        {/* <VerticalStream /> */}
-        <section id="dashboard">
-          <GuardDashboard />
         </section>
         <section id="standards">
           <GlobalStandards />
