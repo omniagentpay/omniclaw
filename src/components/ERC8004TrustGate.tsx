@@ -324,7 +324,7 @@ const ERC8004TrustGate = () => {
               See ERC-8004 in action with two-sided X402 payments
             </p>
             <a
-              href="#quickstart"
+              href="/developer#protocol"
               className="inline-block px-8 py-3 rounded-lg bg-gradient-to-r from-primary to-cyan-500 text-white font-semibold hover:shadow-lg hover:shadow-primary/30 transition-all"
             >
               View Code Example

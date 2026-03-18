@@ -16,6 +16,7 @@ import {
   X,
   Badge,
 } from "lucide-react";
+import { useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
@@ -25,19 +26,24 @@ interface NavItem {
   icon: React.ComponentType<{ className?: string }>;
 }
 
-const navItems: NavItem[] = [
+// Sections for the landing (home) page
+const HOME_NAV_ITEMS: NavItem[] = [
   { id: "hero", label: "Home", icon: Home },
-  { id: "infrastructure", label: "Infrastructure", icon: Layers },
+  { id: "video", label: "Product Demo", icon: Play },
   { id: "trust-gate", label: "ERC-8004", icon: Badge },
-  { id: "protocol", label: "Protocol", icon: Zap },
-  { id: "mcp", label: "MCP Tools", icon: Code },
-  { id: "quickstart", label: "Quick Start", icon: Rocket },
-  { id: "video", label: "Video", icon: Play },
   { id: "liveflow", label: "Live Flow", icon: Activity },
-  { id: "safety", label: "Safety", icon: Shield },
-  { id: "dashboard", label: "Dashboard", icon: BarChart3 },
   { id: "standards", label: "Standards", icon: Award },
   { id: "trusted", label: "Trusted By", icon: Users },
+];
+
+// Sections for the developer page
+const DEVELOPER_NAV_ITEMS: NavItem[] = [
+  { id: "infrastructure", label: "Infrastructure", icon: Layers },
+  { id: "protocol", label: "Protocol", icon: Zap },
+  { id: "safety", label: "Safety", icon: Shield },
+  { id: "dashboard", label: "Dashboard", icon: BarChart3 },
+  { id: "mcp", label: "MCP Tools", icon: Code },
+  { id: "quickstart", label: "Quick Start", icon: Rocket },
 ];
 
 const SideNavigation = () => {
@@ -49,6 +55,9 @@ const SideNavigation = () => {
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const isClickingRef = useRef<boolean>(false);
   const clickedSectionRef = useRef<string | null>(null);
+
+  const location = useLocation();
+  const navItems = location.pathname === "/developer" ? DEVELOPER_NAV_ITEMS : HOME_NAV_ITEMS;
 
   // Remove the visibility delay to prevent re-initialization
 

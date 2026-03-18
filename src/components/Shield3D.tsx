@@ -2,18 +2,21 @@ import { motion } from "framer-motion";
 
 const Shield3D = () => {
   return (
-    <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ perspective: "1200px" }}>
+    <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0" style={{ perspective: "1200px" }}>
       <motion.div
-        animate={{ rotateY: [0, 360] }}
-        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-        className="relative"
+        animate={{ rotateY: [0, 360], translateY: [-10, 10, -10] }}
+        transition={{ 
+          rotateY: { duration: 35, repeat: Infinity, ease: "linear" },
+          translateY: { duration: 8, repeat: Infinity, ease: "easeInOut" }
+        }}
+        className="relative scale-[1.2] opacity-80"
         style={{ 
           transformStyle: "preserve-3d",
           willChange: "transform", // GPU acceleration hint
         }}
       >
         {/* Shield shape - translucent hexagonal layers */}
-        <svg width="420" height="480" viewBox="0 0 420 480" fill="none" className="opacity-[0.07]">
+        <svg width="600" height="680" viewBox="0 0 420 480" fill="none" className="opacity-[0.15]">
           <defs>
             <linearGradient id="shield-grad" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0%" stopColor="hsl(75, 100%, 50%)" />
@@ -36,9 +39,9 @@ const Shield3D = () => {
           <path
             d="M210 60 L350 125 L350 285 L210 420 L70 285 L70 125 Z"
             stroke="url(#shield-grad)"
-            strokeWidth="1"
+            strokeWidth="1.5"
             fill="hsl(190, 100%, 50%)"
-            fillOpacity="0.02"
+            fillOpacity="0.04"
           />
           {/* Inner shield */}
           <path

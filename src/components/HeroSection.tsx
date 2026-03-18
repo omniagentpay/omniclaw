@@ -1,7 +1,8 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
-import CodeTerminal from "./CodeTerminal";
 import Shield3D from "./Shield3D";
+import FloatingElements from "./FloatingElements";
+import { ArrowRight, Play, ShieldCheck, Zap } from "lucide-react";
 
 const HeroSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
@@ -29,6 +30,9 @@ const HeroSection = () => {
           backgroundSize: "80px 80px",
         }}
       />
+      
+      {/* Dynamic Background Elements */}
+      <FloatingElements />
 
       {/* 3D Shield behind text */}
       <Shield3D />
@@ -62,9 +66,51 @@ const HeroSection = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.5 }}
-            className="max-w-2xl xl:max-w-3xl mx-auto"
+            className="max-w-3xl mx-auto flex flex-col items-center"
           >
-            <CodeTerminal />
+            {/* Call to Actions */}
+            <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 mb-16 w-full sm:w-auto">
+              <a
+                href="/docs/quickstart"
+                className="magnetic-button-glow flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 bg-primary text-primary-foreground font-semibold rounded-xl hover:brightness-110 transition-all text-sm sm:text-base border border-transparent"
+              >
+                <span>Start Building Now</span>
+                <ArrowRight className="w-4 h-4" />
+              </a>
+              <a
+                href="#video"
+                className="flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 bg-glass-bg/50 backdrop-blur-md text-foreground font-semibold rounded-xl border border-glass-border hover:bg-glass-bg hover:border-primary/50 transition-all text-sm sm:text-base"
+              >
+                <div className="h-6 w-6 rounded-full bg-primary/20 flex items-center justify-center">
+                  <Play className="w-3 h-3 text-primary ml-0.5" />
+                </div>
+                <span>Watch Demo</span>
+              </a>
+            </div>
+
+            {/* Visual Metrics / Trust Strip */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-12 w-full pt-8 border-t border-glass-border/60">
+              <div className="flex flex-col items-center">
+                <div className="flex items-center gap-2 mb-2">
+                  <Zap className="w-4 h-4 text-primary" />
+                  <span className="text-xl sm:text-2xl font-bold font-mono text-foreground">{'<'} 400ms</span>
+                </div>
+                <span className="text-xs sm:text-sm text-muted-foreground uppercase tracking-wider font-semibold">Settlement Time</span>
+              </div>
+              <div className="flex flex-col items-center border-t sm:border-t-0 sm:border-x border-glass-border/60 pt-6 sm:pt-0 sm:px-12">
+                <div className="flex items-center gap-2 mb-2">
+                  <ShieldCheck className="w-4 h-4 text-accent" />
+                  <span className="text-xl sm:text-2xl font-bold font-mono text-foreground">100%</span>
+                </div>
+                <span className="text-xs sm:text-sm text-muted-foreground uppercase tracking-wider font-semibold">Atomic Safety</span>
+              </div>
+              <div className="flex flex-col items-center border-t sm:border-t-0 border-glass-border/60 pt-6 sm:pt-0">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-xl sm:text-2xl font-bold font-mono text-foreground">$50M+</span>
+                </div>
+                <span className="text-xs sm:text-sm text-muted-foreground uppercase tracking-wider font-semibold">Secured Volume</span>
+              </div>
+            </div>
           </motion.div>
         </div>
       </div>
