@@ -234,7 +234,7 @@ const Docs = () => {
           {/* Right actions */}
           <div className="flex items-center gap-1 shrink-0">
             <a
-              href="https://github.com"
+              href="https://github.com/omnuron/omniclaw"
               target="_blank"
               rel="noopener noreferrer"
               className="hidden md:flex items-center gap-1.5 px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground rounded-md hover:bg-accent transition-colors"

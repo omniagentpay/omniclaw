@@ -338,7 +338,7 @@ const DocsSidebar = ({ collapsed = false, onToggle }: DocsSidebarProps) => {
       {/* Footer */}
       <div className="px-4 py-3 border-t border-border">
         <a
-          href="https://github.com"
+          href="https://github.com/omnuron/omniclaw"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
