@@ -215,6 +215,26 @@
     display: none;
   }
 
+  /* Themed slim scrollbar — matches cyber-lime primary */
+  .scrollbar-docs {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(75 100% 50% / 0.18) transparent;
+  }
+  .scrollbar-docs::-webkit-scrollbar {
+    width: 4px;
+  }
+  .scrollbar-docs::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .scrollbar-docs::-webkit-scrollbar-thumb {
+    background: hsl(75 100% 50% / 0.18);
+    border-radius: 999px;
+    transition: background 0.2s;
+  }
+  .scrollbar-docs::-webkit-scrollbar-thumb:hover {
+    background: hsl(75 100% 50% / 0.45);
+  }
+
   /* Responsive container utilities */
   .container-responsive {
     @apply w-full mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 3xl:px-20 4xl:px-24;

@@ -156,6 +156,7 @@ const searchGroups: Record<string, Array<{ title: string; url: string }>> = {
 // ── Main component ─────────────────────────────────────────
 const Docs = () => {
   const [open, setOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const location = useLocation();
   const navigate = useNavigate();
   const isLanding = location.pathname === "/docs";
@@ -256,8 +257,12 @@ const Docs = () => {
       <div className="flex max-w-screen-2xl mx-auto">
 
         {/* Left sidebar */}
-        <aside className="hidden lg:block w-60 xl:w-64 shrink-0 border-r border-border sticky top-14 h-[calc(100vh-3.5rem)] overflow-y-auto">
-          <DocsSidebar />
+        <aside
+          className={`hidden lg:flex flex-col shrink-0 border-r border-border sticky top-14 h-[calc(100vh-3.5rem)] overflow-hidden transition-[width] duration-300 ease-in-out ${
+            sidebarOpen ? "w-60 xl:w-64" : "w-12"
+          }`}
+        >
+          <DocsSidebar collapsed={!sidebarOpen} onToggle={() => setSidebarOpen((s) => !s)} />
         </aside>
 
         {/* Main content */}
