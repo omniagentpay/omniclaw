@@ -49,7 +49,7 @@ const HeroSection = () => {
           >
             <span className="text-foreground">Agents Think.</span>
             <br />
-            <span className="text-gradient-lime">We Handle the Money.</span>
+            <span className="text-gradient-lime">We Govern the Money.</span>
           </motion.h1>
 
           <motion.p

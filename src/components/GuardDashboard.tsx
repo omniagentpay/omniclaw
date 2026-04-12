@@ -118,7 +118,8 @@ const GuardDashboard = () => {
                     { label: "Budget Gate", status: "active" },
                     { label: "Rate Gate", status: "active" },
                     { label: "Recipient Gate", status: "active" },
-                    { label: "Anomaly Detection", status: "learning" },
+                    { label: "SingleTx Gate", status: "active" },
+                    { label: "Confirm Gate", status: "active" },
                   ].map((gate) => (
                     <div key={gate.label} className="flex items-center justify-between">
                       <span className="text-sm text-muted-foreground">{gate.label}</span>

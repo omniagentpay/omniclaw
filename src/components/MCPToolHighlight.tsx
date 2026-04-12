@@ -2,17 +2,33 @@ import { Bot, User, Wrench, CheckCircle } from "lucide-react";
 import ScrollReveal from "./ScrollReveal";
 
 const chatMessages = [
-  { role: "user" as const, content: "Purchase 500 API credits from DataVendor for the research pipeline." },
-  { role: "assistant" as const, content: "I'll process that payment through your OmniClaw wallet. Let me execute the payment tool." },
+  { role: "user" as const, content: "Pay $4.99 to DataVendor for 500 API credits. Verify their trust score first." },
+  { role: "assistant" as const, content: "I'll run a trust check on DataVendor, simulate the payment, then execute. Stand by." },
   {
     role: "tool" as const,
-    name: "omniclaw_pay",
+    name: "trust_lookup",
     content: {
-      input: { to: "datavendor.ai", amount: 4.99, currency: "USDC", memo: "500 API credits — research pipeline" },
+      input: { agent_id: "did:erc8004:base:0xDataVendor..." },
+      output: { wts: 0.87, tier: "verified", blocklisted: false, attestations: 12 },
+    },
+  },
+  {
+    role: "tool" as const,
+    name: "simulate_payment",
+    content: {
+      input: { from_wallet_id: "wallet_abc", to: "0xDataVendor...", amount: "4.99", currency: "USDC" },
+      output: { would_succeed: true, guard_checks: "all_passed", projected_balance: "45.01" },
+    },
+  },
+  {
+    role: "tool" as const,
+    name: "pay",
+    content: {
+      input: { from_wallet_id: "wallet_abc", to: "0xDataVendor...", amount: "4.99", currency: "USDC", memo: "500 API credits" },
       output: { status: "confirmed", tx_hash: "0x7f3a...c9e1", balance_after: 45.01, guard_check: "all_gates_passed" },
     },
   },
-  { role: "assistant" as const, content: "Done. Payment of $4.99 USDC confirmed. Your 500 API credits are now active. Remaining daily budget: $45.01." },
+  { role: "assistant" as const, content: "Done. DataVendor WTS 0.87 ✓, simulation passed ✓, payment of $4.99 USDC confirmed. Remaining budget: $45.01." },
 ];
 
 const MCPToolHighlight = () => {
@@ -23,7 +39,7 @@ const MCPToolHighlight = () => {
           <div className="text-center mb-16">
             <p className="text-sm font-mono text-primary tracking-widest uppercase mb-4">MCP Integration</p>
             <h2 className="font-display font-bold text-3xl md:text-5xl text-foreground tracking-tight mb-4">Payments as a Tool Call</h2>
-            <p className="text-muted-foreground text-lg max-w-xl mx-auto">Connect OmniClaw to Claude, GPT, or any MCP-compatible agent. Payments become just another tool in the agent's toolkit.</p>
+            <p className="text-muted-foreground text-lg max-w-xl mx-auto">Connect OmniClaw to Claude, GPT, or any MCP-compatible agent. 16 agent-safe tools — trust lookup, simulate, pay, intents, ledger, and more.</p>
           </div>
         </ScrollReveal>
 
@@ -35,7 +51,7 @@ const MCPToolHighlight = () => {
               </div>
               <div>
                 <div className="text-sm font-semibold text-foreground">Agent Session</div>
-                <div className="text-xs text-muted-foreground">claude-4-opus · omniclaw_pay tool active</div>
+                <div className="text-xs text-muted-foreground">claude-3-5-sonnet · 16 MCP tools active</div>
               </div>
               <div className="ml-auto flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-primary/10">
                 <div className="h-1.5 w-1.5 rounded-full bg-primary" />
@@ -64,7 +80,7 @@ const MCPToolHighlight = () => {
                       </div>
                       <div className="terminal-bg rounded-lg overflow-hidden max-w-[85%] w-full">
                         <div className="flex items-center gap-2 px-4 py-2 border-b border-border">
-                          <span className="text-xs font-mono text-primary font-medium">omniclaw_pay</span>
+                          <span className="text-xs font-mono text-primary font-medium">{msg.name}</span>
                           <CheckCircle size={12} className="text-primary ml-auto" />
                         </div>
                         <div className="p-4 font-mono text-xs space-y-2">
@@ -79,8 +95,8 @@ const MCPToolHighlight = () => {
                           {Object.entries(msg.content.output).map(([k, v]) => (
                             <div key={k} className="flex gap-2">
                               <span className="text-primary">{k}:</span>
-                              <span className={k === "status" || k === "guard_check" ? "text-primary" : "text-foreground/80"}>
-                                {typeof v === "number" ? v : `"${v}"`}
+                              <span className={k === "status" || k === "guard_check" || k === "would_succeed" || k === "tier" ? "text-primary" : "text-foreground/80"}>
+                                {typeof v === "number" ? v : typeof v === "boolean" ? String(v) : `"${v}"`}
                               </span>
                             </div>
                           ))}

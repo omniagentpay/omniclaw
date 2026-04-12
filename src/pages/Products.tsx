@@ -2,69 +2,117 @@ import Navbar from "@/components/Navbar";
 import SideNavigation from "@/components/SideNavigation";
 import SiteFooter from "@/components/SiteFooter";
 import ScrollReveal from "@/components/ScrollReveal";
+import MeshBackground from "@/components/MeshBackground";
 
 const Products = () => {
   const products = [
     {
-      id: "omnicall",
-      name: "OmniCall",
-      tagline: "Revolutionary Voice Negotiation System",
+      id: "sdk",
+      name: "OmniClaw SDK",
+      tagline: "Three lines to add payments to any agent",
+      badge: "Core",
+      badgeColor: "bg-primary/10 text-primary",
       description:
-        "Introducing OmniCall AI, a revolutionary voice negotiation system that operates autonomously through a swarm of eight agents. This cutting-edge technology eliminates the need for manual phone calls, streamlining the booking process into a single effortless command.",
+        "The Python SDK that is the heart of OmniClaw. One import, one client, one `pay()` call. Integrates with any agent framework — LangChain, AutoGen, CrewAI, or custom — without blockchain complexity or private key management.",
       features: [
-        "Autonomous swarm of 8 agents",
-        "Voice negotiation capabilities",
-        "One-command booking",
-        "No manual intervention required",
-        "Natural conversation flow",
+        "pip install omniclaw — zero blockchain setup",
+        "Auto-routed across Transfer, x402, CCTP, Nanopayments",
+        "Atomic Guard Kernel with 5 configurable guards",
+        "ERC-8004 Trust Gate for on-chain agent identity checks",
+        "Payment Intents with authorize/capture (HITL) flow",
+        "Built-in ledger, idempotency, circuit breaker & retry",
       ],
     },
     {
-      id: "omnicoreagent",
-      name: "OmniCoreAgent",
-      tagline: "Framework for building autonomous AI agents",
+      id: "mcp-server",
+      name: "MCP Server",
+      tagline: "16 agent-safe tools over stateless HTTP MCP",
+      badge: "Integration",
+      badgeColor: "bg-accent/10 text-accent",
       description:
-        "The brain for building production AI agents. It gives agents the ability to reason, use tools, remember context, and execute real-world tasks reliably.",
+        "A FastAPI + FastMCP server that wraps the SDK for LLM agent runtimes. Agents get a safe, read-only-constrained toolset — they can pay, simulate, and check balances, but they cannot modify their own guardrails.",
       features: [
-        "Multi-tool integration",
-        "Context memory management",
-        "Real-world task execution",
-        "Reliable reasoning engine",
-        "Production-ready framework",
+        "16 agent-safe tools (pay, simulate, batch_pay, trust_lookup, …)",
+        "Stateless HTTP transport — works with Claude Desktop, Cursor, Windsurf",
+        "Bearer-token / JWT authentication out of the box",
+        "Guard settings controlled by operator env vars, not the agent",
+        "Circle webhook route for real-time settlement events",
+        "Docker + Cloud Run deployment out of the box",
       ],
     },
     {
-      id: "omnidaemon",
-      name: "OmniDaemon",
-      tagline: "Event-driven runtime for autonomous execution",
+      id: "guard-kernel",
+      name: "Guard Kernel",
+      tagline: "Atomic spend controls for every transaction",
+      badge: "Security",
+      badgeColor: "bg-purple-500/10 text-purple-400",
       description:
-        "Event-driven runtime that runs agents automatically. It listens for events and triggers agents to act without human intervention. The engine that makes agents run autonomously.",
+        "The five-guard atomic pipeline that sits in front of every payment. All guards use reserve/commit/release (2-phase commit), so a failed payment never permanently burns your budget.",
       features: [
-        "Event-driven architecture",
-        "Automatic agent triggering",
-        "Asynchronous execution",
-        "No human intervention needed",
-        "Scalable event processing",
+        "BudgetGuard — daily, hourly, and lifetime rolling windows",
+        "RateLimitGuard — max transactions per minute/hour/day",
+        "SingleTxGuard — per-transaction min/max amount ceiling",
+        "RecipientGuard — whitelist/blacklist with address, regex, domain",
+        "ConfirmGuard — HITL approval above configurable threshold",
+        "Per-wallet or per-wallet-set guard binding",
       ],
     },
     {
-      id: "omnimemory",
-      name: "OmniMemory",
-      tagline: "Persistent memory system for AI agents",
+      id: "trust-gate",
+      name: "ERC-8004 Trust Gate",
+      tagline: "On-chain agent identity + reputation for every payment",
+      badge: "Identity",
+      badgeColor: "bg-yellow-500/10 text-yellow-400",
       description:
-        "Persistent memory system for AI agents. It stores context, history, knowledge, and state across Redis, databases, and vector stores. The memory layer that makes agents stateful and intelligent over time.",
+        "The first production integration of ERC-8004 (Trustless Agents standard). Evaluates every recipient's on-chain identity and Weighted Trust Score through a 10-checkpoint pipeline before the guard chain runs.",
       features: [
-        "Context persistence",
-        "Multi-backend support (Redis, databases, vector stores)",
-        "Knowledge management",
-        "Long-term state retention",
-        "Intelligent recall system",
+        "Identity Registry (ERC-721 ext) — deployed on ETH mainnet & Base",
+        "Reputation Registry — feedback signals with verified submitter boost",
+        "WTS (Weighted Trust Score) — recency decay, self-review filter",
+        "10-check policy: blocklist → whitelist → identity → fraud tags → WTS",
+        "Configurable presets: permissive / standard / strict",
+        "Results cached in StorageBackend (Redis or memory) with TTL",
+      ],
+    },
+    {
+      id: "nanopayments",
+      name: "Nanopayments (EIP-3009)",
+      tagline: "Gas-free micro-USDC via Circle Gateway batch settlement",
+      badge: "Protocol",
+      badgeColor: "bg-blue-500/10 text-blue-400",
+      description:
+        "The Circle Gateway EIP-3009 adapter enables sub-cent USDC transfers without gas costs. Buyers sign a `TransferWithAuthorization` (EIP-712), Circle batches and settles — making API metering economical at any scale.",
+      features: [
+        "EIP-3009 TransferWithAuthorization signing (domain: GatewayWalletBatched)",
+        "Auto-routes amounts below nanopayments_micro_threshold",
+        "Seller-side GatewayMiddleware — FastAPI Depends() in 3 lines",
+        "Auto-topup: wallet deposits to gateway when balance drops below threshold",
+        "Withdraw to Circle Developer Wallet or cross-chain via CCTP",
+        "Full 2-sided: agents pay AND receive through the same infrastructure",
+      ],
+    },
+    {
+      id: "enterprise-dashboard",
+      name: "Enterprise Dashboard",
+      tagline: "Real-time control plane with audit trail and HITL workflows",
+      badge: "Enterprise",
+      badgeColor: "bg-orange-500/10 text-orange-400",
+      description:
+        "The operator-facing control surface. Set policy, manage guard configurations, review HITL confirmation queues, export compliance reports, and monitor the full ledger — all without touching agent code.",
+      features: [
+        "Real-time ledger — every transaction with agent identity + policy ref",
+        "HITL approval queue with ConfirmGuard integration",
+        "Policy management — create/update guard configs per wallet or set",
+        "Compliance export — audit trail for CLARITY Act / Travel Rule alignment",
+        "Circuit breaker status and resilience monitoring",
+        "Webhook dedup + replay protection for production deployments",
       ],
     },
   ];
 
   return (
     <div className="relative min-h-screen">
+      <MeshBackground />
       <Navbar />
       <SideNavigation />
       <div className="relative z-2 pt-24 pb-16">
@@ -72,10 +120,10 @@ const Products = () => {
           {/* Header */}
           <ScrollReveal>
             <div className="mb-16 text-center">
-              <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">OmniClaw Products</h1>
+              <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">The OmniClaw Suite</h1>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                A comprehensive suite of AI agent infrastructure and governance solutions designed to empower
-                enterprises with autonomous, controlled, and intelligent systems.
+                The full spend-control and payment infrastructure stack for AI agents — from a three-line SDK
+                to an enterprise-grade control plane with on-chain identity and HITL compliance.
               </p>
             </div>
           </ScrollReveal>
@@ -88,6 +136,10 @@ const Products = () => {
                   <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   
                   <div className="relative z-10">
+                    {/* Badge */}
+                    <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold mb-3 ${product.badgeColor}`}>
+                      {product.badge}
+                    </span>
                     {/* Product Title */}
                     <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">{product.name}</h2>
                     <p className="text-primary font-semibold mb-4">{product.tagline}</p>
