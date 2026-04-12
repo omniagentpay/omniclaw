@@ -1,5 +1,5 @@
-import { NavLink } from "react-router-dom";
-import { ChevronRight } from "lucide-react";
+import { NavLink, useLocation, Link } from "react-router-dom";
+import { ChevronRight, ExternalLink } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
@@ -51,10 +51,51 @@ const navItems: NavItem[] = [
     ],
   },
   {
+    title: "Nanopayments",
+    url: "/docs/nanopayments",
+    children: [
+      { title: "Overview", url: "/docs/nanopayments" },
+      { title: "EIP-3009 Signing", url: "/docs/nanopayments/signing" },
+      { title: "Seller Middleware", url: "/docs/nanopayments/middleware" },
+    ],
+  },
+  {
+    title: "Trust Gate (ERC-8004)",
+    url: "/docs/trust-gate",
+    children: [
+      { title: "Overview", url: "/docs/trust-gate" },
+      { title: "10-Check Pipeline", url: "/docs/trust-gate/pipeline" },
+      { title: "Trust Score (WTS)", url: "/docs/trust-gate/wts" },
+    ],
+  },
+  {
+    title: "Policy Reference",
+    url: "/docs/policy-reference",
+    children: [
+      { title: "Guard Config Schema", url: "/docs/policy-reference" },
+      { title: "Examples", url: "/docs/policy-reference/examples" },
+    ],
+  },
+  {
+    title: "Cross-chain (CCTP)",
+    url: "/docs/cctp",
+  },
+  {
+    title: "Production Hardening",
+    url: "/docs/production",
+    children: [
+      { title: "Overview", url: "/docs/production" },
+      { title: "Circuit Breaker", url: "/docs/production/circuit-breaker" },
+      { title: "Idempotency", url: "/docs/production/idempotency" },
+    ],
+  },
+  {
     title: "API Reference",
     url: "/docs/api-reference/pay",
     children: [
       { title: "client.pay()", url: "/docs/api-reference/pay" },
+      { title: "create_agent_wallet()", url: "/docs/api-reference/wallet" },
+      { title: "trust_lookup()", url: "/docs/api-reference/trust" },
     ],
   },
 ];
@@ -65,6 +106,10 @@ const DocsSidebar = () => {
     wallets: true,
     "payment-guards": true,
     "mcp-integration": true,
+    nanopayments: true,
+    "trust-gate": true,
+    "policy-reference": true,
+    production: true,
     "api-reference": true,
   });
 

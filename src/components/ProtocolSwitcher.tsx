@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowRightLeft, Globe, Zap } from "lucide-react";
+import { ArrowRightLeft, Globe, Zap, Coins } from "lucide-react";
 import ScrollReveal from "./ScrollReveal";
 
 const tabs = [
@@ -10,7 +10,7 @@ const tabs = [
     icon: ArrowRightLeft,
     description: "Send USDC directly between agent wallets with sub-second finality. No intermediaries, no wrapped tokens.",
     code: [
-      { token: "keyword", text: "from " }, { token: "module", text: "omniclaw.adapters" }, { token: "keyword", text: " import " }, { token: "type", text: "TransferAdapter" }, { token: "plain", text: "\n\n" },
+      { token: "keyword", text: "from " }, { token: "module", text: "omniclaw.protocols.transfer" }, { token: "keyword", text: " import " }, { token: "type", text: "TransferAdapter" }, { token: "plain", text: "\n\n" },
       { token: "variable", text: "adapter" }, { token: "plain", text: " = " }, { token: "type", text: "TransferAdapter" }, { token: "plain", text: "(\n  " },
       { token: "param", text: "network" }, { token: "plain", text: "=" }, { token: "string", text: '"base"' }, { token: "plain", text: ",\n  " },
       { token: "param", text: "token" }, { token: "plain", text: "=" }, { token: "string", text: '"USDC"' }, { token: "plain", text: "\n)\n" },
@@ -27,7 +27,7 @@ const tabs = [
     icon: Zap,
     description: "HTTP 402 native payments. Agents pay per API call with micropayments baked into the protocol layer.",
     code: [
-      { token: "keyword", text: "from " }, { token: "module", text: "omniclaw.adapters" }, { token: "keyword", text: " import " }, { token: "type", text: "X402Adapter" }, { token: "plain", text: "\n\n" },
+      { token: "keyword", text: "from " }, { token: "module", text: "omniclaw.protocols.x402" }, { token: "keyword", text: " import " }, { token: "type", text: "X402Adapter" }, { token: "plain", text: "\n\n" },
       { token: "variable", text: "x402" }, { token: "plain", text: " = " }, { token: "type", text: "X402Adapter" }, { token: "plain", text: "(\n  " },
       { token: "param", text: "wallet" }, { token: "plain", text: "=" }, { token: "variable", text: "agent_wallet" }, { token: "plain", text: "\n)\n\n" },
       { token: "comment", text: "# Auto-pays on HTTP 402 response" }, { token: "plain", text: "\n" },
@@ -44,7 +44,7 @@ const tabs = [
     icon: Globe,
     description: "Bridge USDC across chains using Circle's CCTP. Atomic cross-chain settlement with built-in attestation verification.",
     code: [
-      { token: "keyword", text: "from " }, { token: "module", text: "omniclaw.adapters" }, { token: "keyword", text: " import " }, { token: "type", text: "GatewayAdapter" }, { token: "plain", text: "\n\n" },
+      { token: "keyword", text: "from " }, { token: "module", text: "omniclaw.protocols.gateway" }, { token: "keyword", text: " import " }, { token: "type", text: "GatewayAdapter" }, { token: "plain", text: "\n\n" },
       { token: "variable", text: "gw" }, { token: "plain", text: " = " }, { token: "type", text: "GatewayAdapter" }, { token: "plain", text: "(\n  " },
       { token: "param", text: "source" }, { token: "plain", text: "=" }, { token: "string", text: '"ethereum"' }, { token: "plain", text: ",\n  " },
       { token: "param", text: "destination" }, { token: "plain", text: "=" }, { token: "string", text: '"base"' }, { token: "plain", text: "\n)\n" },
@@ -53,6 +53,24 @@ const tabs = [
       { token: "param", text: "recipient" }, { token: "plain", text: "=" }, { token: "string", text: '"0xab12...ef56"' }, { token: "plain", text: "\n)" },
     ],
     stats: [{ label: "Bridge Time", value: "~90s" }, { label: "Protocol", value: "CCTP v2" }, { label: "Chains", value: "8 supported" }],
+  },
+  {
+    id: "nanopayments",
+    label: "Nanopayments",
+    sublabel: "EIP-3009 Micro-USDC",
+    icon: Coins,
+    description: "Gas-free sub-cent USDC via Circle Gateway batch settlement. Buyers sign EIP-712 authorizations; Circle batches and settles — economical at any scale.",
+    code: [
+      { token: "keyword", text: "from " }, { token: "module", text: "omniclaw.protocols.nanopayments" }, { token: "keyword", text: " import " }, { token: "type", text: "NanopaymentClient" }, { token: "plain", text: "\n\n" },
+      { token: "variable", text: "nano" }, { token: "plain", text: " = " }, { token: "type", text: "NanopaymentClient" }, { token: "plain", text: "(\n  " },
+      { token: "param", text: "wallet" }, { token: "plain", text: "=" }, { token: "variable", text: "agent_wallet" }, { token: "plain", text: ",\n  " },
+      { token: "param", text: "gateway_address" }, { token: "plain", text: "=" }, { token: "string", text: '"0xCircle..."' }, { token: "plain", text: "\n)\n\n" },
+      { token: "comment", text: "# EIP-712 signed, Circle batches settlement" }, { token: "plain", text: "\n" },
+      { token: "variable", text: "auth" }, { token: "plain", text: " = " }, { token: "keyword", text: "await " }, { token: "variable", text: "nano" }, { token: "plain", text: "." }, { token: "function", text: "authorize" }, { token: "plain", text: "(\n  " },
+      { token: "param", text: "to" }, { token: "plain", text: "=" }, { token: "string", text: '"0xSeller..."' }, { token: "plain", text: ",\n  " },
+      { token: "param", text: "amount" }, { token: "plain", text: "=" }, { token: "string", text: '"0.00050"' }, { token: "plain", text: "\n)" },
+    ],
+    stats: [{ label: "Fee", value: "< $0.001" }, { label: "Standard", value: "EIP-3009" }, { label: "Settlement", value: "Circle Gateway" }],
   },
 ];
 
@@ -79,7 +97,7 @@ const ProtocolSwitcher = () => {
         </ScrollReveal>
 
         <ScrollReveal delay={0.1}>
-          <div className="flex flex-col sm:flex-row gap-2 mb-8 max-w-3xl mx-auto">
+          <div className="flex flex-wrap gap-2 mb-8 max-w-3xl mx-auto">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;

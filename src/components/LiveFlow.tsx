@@ -17,9 +17,11 @@ interface Particle {
 }
 
 const RING_POSITIONS = [
-  { x: 280, label: "Budget Gate", color: "hsl(45, 100%, 55%)" },
-  { x: 460, label: "Velocity Gate", color: "hsl(190, 100%, 50%)" },
-  { x: 640, label: "Recipient Gate", color: "hsl(75, 100%, 50%)" },
+  { x: 220, label: "Budget Gate", color: "hsl(45, 100%, 55%)" },
+  { x: 360, label: "Rate Gate", color: "hsl(190, 100%, 50%)" },
+  { x: 500, label: "Recipient Gate", color: "hsl(75, 100%, 50%)" },
+  { x: 640, label: "SingleTx Gate", color: "hsl(45, 100%, 55%)" },
+  { x: 780, label: "Confirm Gate", color: "hsl(280, 100%, 70%)" },
 ];
 
 const LiveFlow = () => {
@@ -37,7 +39,7 @@ const LiveFlow = () => {
     const ctx = canvas.getContext("2d", { alpha: false });
     if (!ctx) return;
 
-    const W = 860;
+    const W = 960;
     const H = 320;
     const dpr = Math.min(window.devicePixelRatio || 1, 2); // Cap at 2x for performance
     canvas.width = W * dpr;
@@ -123,7 +125,7 @@ const LiveFlow = () => {
       // Draw flow line
       ctx.beginPath();
       ctx.moveTo(60, 160);
-      ctx.lineTo(800, 160);
+      ctx.lineTo(900, 160);
       ctx.strokeStyle = "hsl(220, 15%, 12%)";
       ctx.lineWidth = 1;
       ctx.stroke();
@@ -146,7 +148,7 @@ const LiveFlow = () => {
 
       // Destination node
       ctx.beginPath();
-      ctx.arc(800, 160, 14, 0, Math.PI * 2);
+      ctx.arc(900, 160, 14, 0, Math.PI * 2);
       ctx.fillStyle = "hsl(220, 20%, 10%)";
       ctx.fill();
       ctx.strokeStyle = "hsla(190, 100%, 50%, 0.5)";
@@ -154,10 +156,10 @@ const LiveFlow = () => {
       ctx.stroke();
       ctx.font = "600 8px Inter, sans-serif";
       ctx.fillStyle = "hsl(190, 100%, 50%)";
-      ctx.fillText("PAY", 800, 163);
+      ctx.fillText("PAY", 900, 163);
       ctx.fillStyle = "hsl(215, 12%, 40%)";
       ctx.font = "400 10px Inter, sans-serif";
-      ctx.fillText("Execute", 800, 195);
+      ctx.fillText("Execute", 900, 195);
 
       // Draw rings
       const activeRings = new Set<number>();
@@ -189,7 +191,7 @@ const LiveFlow = () => {
           }
 
           // Past all rings
-          if (p.ring >= RING_POSITIONS.length && p.x >= 780) {
+          if (p.ring >= RING_POSITIONS.length && p.x >= 880) {
             p.phase = "approved";
             statusMsg = "✓ Transaction approved";
           }

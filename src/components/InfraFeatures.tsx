@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Wallet, Shield, Zap, Globe } from "lucide-react";
+import { Wallet, Shield, Zap, Globe, Coins, ArrowLeftRight } from "lucide-react";
 import ScrollReveal from "./ScrollReveal";
 
 const features = [
@@ -19,7 +19,7 @@ const features = [
     id: "security",
     icon: Shield,
     title: "Atomic Safety",
-    description: "Three-gate guard system ensures every transaction passes budget, velocity, and recipient checks.",
+    description: "Five-guard kernel ensures every transaction passes budget, rate, recipient, single-tx, and HITL checks.",
     auraColor: "hsl(190, 100%, 50%)",
     accentClass: "text-accent",
     bgClass: "bg-accent/[0.08]",
@@ -47,6 +47,28 @@ const features = [
     bgClass: "bg-[hsl(260,80%,60%,0.08)]",
     borderClass: "border-[hsl(260,80%,60%,0.25)]",
     stats: { label: "Bridge Time", value: "~90s" },
+  },
+  {
+    id: "nanopayments",
+    icon: Coins,
+    title: "Nanopayments (EIP-3009)",
+    description: "Gas-free sub-cent USDC micro-payments via Circle Gateway batch settlement. EIP-712 signed, zero gas cost.",
+    auraColor: "hsl(45, 100%, 65%)",
+    accentClass: "text-[hsl(45,100%,65%)]",
+    bgClass: "bg-[hsl(45,100%,65%,0.08)]",
+    borderClass: "border-[hsl(45,100%,65%,0.25)]",
+    stats: { label: "Fee", value: "< $0.001" },
+  },
+  {
+    id: "x402-twosided",
+    icon: ArrowLeftRight,
+    title: "Two-Sided X402",
+    description: "Agents pay AND accept X402 payments with the same guard controls. Monetize agent work in three lines.",
+    auraColor: "hsl(320, 80%, 60%)",
+    accentClass: "text-[hsl(320,80%,60%)]",
+    bgClass: "bg-[hsl(320,80%,60%,0.08)]",
+    borderClass: "border-[hsl(320,80%,60%,0.25)]",
+    stats: { label: "Integration", value: "3 lines" },
   },
 ];
 
@@ -83,7 +105,7 @@ const InfraFeatures = () => {
           </div>
         </ScrollReveal>
 
-        <div className="grid md:grid-cols-2 gap-4 max-w-4xl mx-auto">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto">
           {features.map((feature, i) => {
             const Icon = feature.icon;
             const isHovered = hoveredId === feature.id;
